@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http:www.thymeleaf.org"> <!-- 타임리프 선언 -->
+<head>
+<meta charset="UTF-8">
+<title>질문 - 답변 게시판</title>
+</head>
+<body>
+	<table>
+		<tr>
+			<th>제목</th>
+			<th>작성일시</th>
+		</tr>
+		
+		<tr th:each="question:${questionList}">
+			<th th:text="${question.subject}"></th>
+			<th th:text="${question.content}"></th>
+		</tr>
+		
+	</table>
+</body>
+</html>
