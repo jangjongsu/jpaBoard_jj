@@ -8,5 +8,6 @@ import com.jjcompany.jpaBoard.entity.SiteMember;
 public interface SiteMemberRepository extends JpaRepository<SiteMember, Integer>{
 	
 	
+	
 
 }

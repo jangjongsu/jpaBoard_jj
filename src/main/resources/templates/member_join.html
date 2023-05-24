@@ -2,7 +2,7 @@
 <html xmlns:th="http:www.thymeleaf.org"> <!-- 타임리프 선언 -->
 <head>
 <meta charset="UTF-8">
-<title>질문 - 답변 게시판</title>
+<title>회원 가입</title>
 <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}" >
 </head>
 <body>
@@ -25,7 +25,7 @@
           <a class="nav-link" href="#">로그인</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="memberJoin">회원가입</a>
+          <a class="nav-link" href="#">회원가입</a>
         </li>
       </ul>
     </div>
@@ -33,27 +33,30 @@
 </nav>
 
 <!-- 네비게시션 바 끝-->
-
-	<div class="container my-3">
-		<table class="table">
-			<thead class="table-dark">
-			<tr>
-				<th>번호</th>
-				<th>제목</th>
-				<th>작성일시</th>
-			</tr>
-			</thead>
-			<tbody>
-			<tr class="table-success" th:each="question:${questionList}">
-				<td th:text=${question.id}></td>
-				<td ><a th:href="@{|/questionContentView/${question.id}|}" th:text="${question.subject}"></a></td>
-				<td th:text="${#temporals.format(question.createDate,'yyyy-MM-dd HH:mm')}"></td>
-			</tr>
-			</tbody>
-		</table>
-		
-		<a th:href="@{/questionCreate}" class="btn btn-primary my-3">질문등록</a>
-		
+	<div>
+		<div>
+			<h4>회원 가입</h4>
+		</div>
+		<form th:action="memberJoin" method="post" th:object="${memberForm}">
+		<!-- 회원등록시 에러 발생 메세지 출력 -->
+		<div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">
+			<div th:each="err:${#fields.allErrors()}" th:text="${err}"></div>
+		</div>
+		<!-- 회원등록시 에러 발생 메세지 출력 끝 -->
+			<div>
+				시용자 아이디 : <input type="text" th:field="*{userid}" >
+			</div>
+			<div>
+				시용자 비밀번호 : <input type="password"  th:field="*{userpw1}">
+			</div>
+			<div>
+				시용자 비밀번호 확인 : <input type="password" th:field="*{userpw2}" >
+			</div>
+			<div>
+				시용자 이메일 : <input type="text" th:field="*{email}">
+			</div>
+			<input type="submit" value="회원가입">
+		</form>
 	</div>
 </body>
 </html>
