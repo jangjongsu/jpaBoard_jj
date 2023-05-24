@@ -12,8 +12,8 @@
 		</tr>
 		
 		<tr th:each="question:${questionList}">
-			<th th:text="${question.subject}"></th>
-			<th th:text="${question.content}"></th>
+			<th ><a th:href="@{|/questionContentView/${question.id}|}" th:text="${question.subject}"></a></th>
+			<th th:text="${question.createDate}"></th>
 		</tr>
 		
 	</table>

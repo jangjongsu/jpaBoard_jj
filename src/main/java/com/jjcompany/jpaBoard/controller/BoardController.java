@@ -9,18 +9,26 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.jjcompany.jpaBoard.entity.Question;
 import com.jjcompany.jpaBoard.repository.QuestionRepository;
+import com.jjcompany.jpaBoard.service.AnswerService;
+import com.jjcompany.jpaBoard.service.QuestionService;
+
+import oracle.net.aso.m;
 
 @Controller
 public class BoardController {
 	
 	@Autowired
-	private QuestionRepository questionRepository;
+	private QuestionService questionService;
 	
-	@RequestMapping(value = "/")
+	@Autowired
+	private AnswerService answerService;
+	
+	@RequestMapping(value = "/index")
 	public String index() {
 		return "redirect:questionList";
 	}
@@ -40,17 +48,41 @@ public class BoardController {
 		question.setContent(content);
 		question.setCreateDate(LocalDateTime.now());// 서버의 현재시간
 		
-		questionRepository.save(question); // insert(질문글 저장)
+//		questionRepository.save(question); // insert(질문글 저장)
 		
 		return "redirect:questionList";
 	}
 	@RequestMapping(value = "/questionList")
 	public String questionList(Model model) {
 		
-		List<Question> questionList  = questionRepository.findAll();
+//  	List<Question> questionList  = questionRepository.findAll();
+		
+		List<Question> questionList  = questionService.getQuestionList();
 		
 		model.addAttribute("questionList", questionList);
 		
 		return "questionList";
+	}
+	@RequestMapping(value = "/questionContentView/{id}")
+	public String questionContentView(@PathVariable("id") Integer id, Model model) {
+		
+		Question question = questionService.getQuestion(id);
+		
+		model.addAttribute("question", question);
+		
+		return "questionView";
+	}
+	
+	@RequestMapping(value = "/answerCreate/{id}")
+	public String answerCreate(@PathVariable("id") Integer id, HttpServletRequest request) {
+			
+		String content = request.getParameter("content");
+		
+		Question question = questionService.getQuestion(id);
+		
+		answerService.answerCreate(content, question);
+		
+		
+		return String.format("redirect:/questionContentView/%s",id);
 	}
 }
