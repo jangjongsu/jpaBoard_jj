@@ -3,19 +3,26 @@
 <head>
 <meta charset="UTF-8">
 <title>질문 - 답변 게시판</title>
+<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}" >
 </head>
 <body>
-	<table>
-		<tr>
-			<th>제목</th>
-			<th>작성일시</th>
-		</tr>
-		
-		<tr th:each="question:${questionList}">
-			<th ><a th:href="@{|/questionContentView/${question.id}|}" th:text="${question.subject}"></a></th>
-			<th th:text="${question.createDate}"></th>
-		</tr>
-		
-	</table>
+	<div class="container my-3">
+		<table class="table">
+			<thead class="table-dark">
+			<tr>
+				<th>번호</th>
+				<th>제목</th>
+				<th>작성일시</th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr class="table-success" th:each="question:${questionList}">
+				<td th:text=${question.id}></td>
+				<td ><a th:href="@{|/questionContentView/${question.id}|}" th:text="${question.subject}"></a></td>
+				<td th:text="${#temporals.format(question.createDate,'yyyy-MM-dd HH:mm')}"></td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
 </body>
 </html>

@@ -2,24 +2,49 @@
 <html xmlns:th="http:www.thymeleaf.org"> <!-- 타임리프 선언 -->
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
-<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" >
+<title>질문 상세 보기</title>
+<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}" >
 </head>
 <body>
-	<h1 th:text="${question.subject}"></h1>
-	<div th:text="${question.content}"></div>
-	
-	
-	<h5 th:text="|${#lists.size(question.answerList)}개의 답변이 있습니다.|"></h5>
-	<div>
-		<ul>
-			<li th:each="answer:${question.answerList}" th:text="${answer.content}" ></li>
-		</ul>
+<div class="container my-3">
+<!-- 질문 관련 -->
+	<h2 class="border-bottom py-2" th:text="${question.subject}"></h2>
+	<div class="card my-3">
+		<div class="card-body">
+			<div class="card-text" style="white-space:pre-line;" th:text="${question.content}"></div>
+			<div class="d-flex justify-content-end">
+				<div class="badge text-bg-secondary p-2 text-start">
+					<div th:text="${#temporals.format(question.createDate,'yyyy-MM-dd HH:mm')}"></div>
+				</div>
+			</div>
+		</div>
 	</div>
+<!-- 질문 끝-->
+
+
+  	
+  	<!-- 답변 리스트 시작 -->	
+	<h5 class="border-bottom my-3 py-2" th:text="|${#lists.size(question.answerList)}개의 답변이 있습니다.|"></h5>
 	
-	<form th:action="@{|/answerCreate/${question.id}|}" method="post">
-		<textarea rows="10"name="content" ></textarea>
-		<input type="submit" value="답변등록">
+	
+		<div class="card my-3" th:each="answer:${question.answerList}" >
+			<div class="card-body">
+			<div class="card-text" style="white-space:pre-line;" th:text="${answer.content}"></div>
+				<div class="d-flex justify-content-end">
+					<div class="badge text-bg-secondary p-2 text-start">
+						<div th:text="${#temporals.format(answer.createDate,'yyyy-MM-dd HH:mm')}"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	<!-- 답변 리스트 끝 -->
+	
+	<!-- 답변 등록 시작 -->
+	<form th:action="@{|/answerCreate/${question.id}|}" method="post" class="my-3">
+		<textarea id= "content" class="form-control" rows="10" name="content" ></textarea>
+		<input class="btn bnt-primary my-3" type="submit" value="답변등록">
 	</form>
+	<!-- 답변 끝 -->
+</div>
 </body>
 </html>

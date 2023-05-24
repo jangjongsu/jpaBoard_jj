@@ -1,5 +1,6 @@
 package com.jjcompany.jpaBoard.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,6 +16,17 @@ public class QuestionService {
 	
 		@Autowired
 		private QuestionRepository questionRepository;
+		
+		
+		public void insert(String subject, String content) {
+			
+			Question question = new Question();
+			question.setSubject(subject);
+			question.setContent(content);
+			question.setCreateDate(LocalDateTime.now());
+			
+			questionRepository.save(question);
+		}
 		
 		public List<Question> getQuestionList() {
 			
