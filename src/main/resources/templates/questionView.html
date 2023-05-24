@@ -40,8 +40,13 @@
 	<!-- 답변 리스트 끝 -->
 	
 	<!-- 답변 등록 시작 -->
-	<form th:action="@{|/answerCreate/${question.id}|}" method="post" class="my-3">
-		<textarea id= "content" class="form-control" rows="10" name="content" ></textarea>
+	<form th:action="@{|/answerCreate/${question.id}|}" method="post" class="my-3" th:object="${answerForm}">
+	<!-- 답변 유효성 체크 시작 -->
+	<div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">
+			<div th:each="err:${#fields.allErrors()}" th:text="${err}"></div>
+		</div>
+	<!-- 답변 유효성 체크 끝 -->
+		<textarea id="content" class="form-control" rows="10" th:field="*{content}"></textarea>
 		<input class="btn btn-primary my-3" type="submit" value="답변등록">
 	</form>
 	<!-- 답변 끝 -->
