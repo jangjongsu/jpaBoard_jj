@@ -18,7 +18,7 @@ public class QuestionService {
 		private QuestionRepository questionRepository;
 		
 		
-		public void insert(String subject, String content) {
+		public void questionCreate(String subject, String content) {
 			
 			Question question = new Question();
 			question.setSubject(subject);

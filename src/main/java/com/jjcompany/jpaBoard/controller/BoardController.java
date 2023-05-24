@@ -43,13 +43,7 @@ public class BoardController {
 		String subject = request.getParameter("subject");
 		String content = request.getParameter("content");
 		
-//		Question question = new Question();
-//		question.setSubject(subject);
-//		question.setContent(content);
-//		question.setCreateDate(LocalDateTime.now());// 서버의 현재시간
-		
-//		questionRepository.save(question); // insert(질문글 저장)
-		questionService.insert(subject, content);
+		questionService.questionCreate(subject, content);
 		
 		return "redirect:questionList";
 	}
