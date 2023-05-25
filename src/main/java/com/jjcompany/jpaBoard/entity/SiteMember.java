@@ -28,7 +28,7 @@ public class SiteMember {
 	private Integer id; // 멤버 번호(기본키)
 	
 	@Column(unique = true) //아이디가 기본키는 아니지만 유니크 속성 부여(중복값 x)
-	private String userid; // 아이디
+	private String username; // 아이디
 	
 	private String userpw; // 비밀번호
 	
