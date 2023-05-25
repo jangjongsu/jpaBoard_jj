@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http:www.thymeleaf.org"> <!-- 타임리프 선언 -->
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<form th:object="${answerForm}" method="post">
+	<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" >
+		<div>
+			내용<textarea rows="" cols="" th:field="*{content}"></textarea>
+		</div>
+		<input type="submit" value="저장">
+	</form>
+
+</body>
+</html>

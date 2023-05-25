@@ -37,6 +37,8 @@ public class QuestionService {
 			return questionList;
 		}
 		
+		
+		
 		public Question getQuestion(Integer id) {
 			
 			Optional<Question> qptQuestion  = questionRepository.findById(id);
@@ -49,6 +51,14 @@ public class QuestionService {
 			}
 		
 			
+		}
+		public void questoinModify(Question question, String subject, String content) {
+		
+			question.setSubject(subject);
+			question.setContent(content);
+			question.setModifyDate(LocalDateTime.now());
+			
+			questionRepository.save(question);	
 		}
 	
 }

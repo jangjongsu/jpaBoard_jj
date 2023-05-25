@@ -36,7 +36,8 @@
 <!-- 네비게시션 바 끝-->
 <div class="container">
 	<h5 class="my-3 border-bottom pb-2">질문등록 하기</h5>
-	<form th:action="@{/questionCreate}" method="post" th:object="${questionForm}">
+	<form method="post" th:object="${questionForm}">
+		<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" >
 		<!-- 질문등록시 에러 발생 메세지 출력 -->
 		<div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">
 			<div th:each="err:${#fields.allErrors()}" th:text="${err}"></div>

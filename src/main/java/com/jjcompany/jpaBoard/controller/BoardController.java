@@ -11,6 +11,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,10 +20,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.jjcompany.jpaBoard.dto.AnswerForm;
 import com.jjcompany.jpaBoard.dto.MemberForm;
 import com.jjcompany.jpaBoard.dto.QuestionForm;
+import com.jjcompany.jpaBoard.entity.Answer;
 import com.jjcompany.jpaBoard.entity.Question;
 import com.jjcompany.jpaBoard.entity.SiteMember;
 import com.jjcompany.jpaBoard.repository.QuestionRepository;
@@ -31,6 +34,7 @@ import com.jjcompany.jpaBoard.service.MemberService;
 import com.jjcompany.jpaBoard.service.QuestionService;
 
 import oracle.net.aso.m;
+import oracle.net.aso.q;
 
 @Controller
 public class BoardController {
@@ -155,4 +159,79 @@ public class BoardController {
 	public String login() {
 		return "login_form";
 	}
+	
+	@PreAuthorize("isAuthenticated()") // 인증이 필요하면 참
+	@GetMapping(value = "/questionModify/{id}")
+	public String questionModify(@PathVariable("id") Integer id, Principal principal, QuestionForm questionForm, BindingResult bindingResult) {
+		
+		Question question = questionService.getQuestion(id);
+
+		if(!question.getWriter().getUsername().equals(principal.getName())) {
+			//글쓴이와 현재 로그인 중인 유저의 아이디가 다르면
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"해당 질문에 대한 수정 권한이 없습니다.");
+			//에러를 던진다
+		}
+		
+		questionForm.setSubject(question.getSubject());
+		questionForm.setContent(question.getContent());
+		
+		
+		return "questionForm";
+	}
+	@PreAuthorize("isAuthenticated()") // 인증이 필요하면 참
+	@PostMapping(value = "/questionModify/{id}")
+	public String questionModifyOk(@PathVariable("id") Integer id, Principal principal, @Valid QuestionForm questionForm, BindingResult bindingResult) {
+		
+		if(bindingResult.hasErrors()) {
+			return "questionForm";
+		}
+		Question question = questionService.getQuestion(id);
+		
+		if(!question.getWriter().getUsername().equals(principal.getName())) {
+			//해당 질문의 글쓴이와 현재 로그인중인 유저의 아이디가 다르면
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "해당 질문에 대한 수정 권한이 없습니다.");
+		}
+		
+		questionService. questoinModify(question, questionForm.getSubject(), questionForm.getContent());
+		
+		return String.format("redirect:/questionContentView/%s",id);
+	}
+	
+	@PreAuthorize("isAuthenticated()") // 인증이 필요하면 참
+	@GetMapping(value = "/answerModify/{id}")
+	public String answerModify(@PathVariable("id") Integer id, Principal principal, AnswerForm answerForm, BindingResult bindingResult) {
+		
+		Answer answer = answerService.getAnswer(id);
+		
+		if(!answer.getWriter().getUsername().equals(principal.getName())) {
+			//해당 질문의 글쓴이와 현재 로그인중인 유저의 아이디가 다르면
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "해당 질문에 대한 수정 권한이 없습니다.");
+		}
+		
+		answerForm.setContent(answer.getContent());//answerForm에 
+		
+		return "answer_form";
+	}
+	
+	@PreAuthorize("isAuthenticated()") // 인증이 필요하면 참
+	@PostMapping(value = "/answerModify/{id}")
+	public String answerModifyOk(@PathVariable("id") Integer id, Principal principal, @Valid AnswerForm answerForm, BindingResult bindingResult) {
+		
+		if(bindingResult.hasErrors()) {
+			return "questionForm";
+		}
+		Answer answer = answerService.getAnswer(id);
+		
+		if(!answer.getWriter().getUsername().equals(principal.getName())) {
+			//해당 질문의 글쓴이와 현재 로그인중인 유저의 아이디가 다르면
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "해당 질문에 대한 수정 권한이 없습니다.");
+		}
+		
+		answerService. answerModify(answer, answerForm.getContent());
+		
+		return String.format("redirect:/questionContentView/%s", answer.getQuestion().getId());
+	}
+	
+	
+	
 }

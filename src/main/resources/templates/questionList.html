@@ -52,7 +52,10 @@
 			<tbody>
 			<tr class="table-success" th:each="question:${questionList}">
 				<td th:text=${question.id}></td>
-				<td ><a th:href="@{|/questionContentView/${question.id}|}" th:text="${question.subject}"></a></td>
+				<td >
+					<a th:href="@{|/questionContentView/${question.id}|}" th:text="${question.subject}"></a>
+					<span class="text-danger small ms-2" th:if="${#lists.size(question.answerList) > 0}" th:text="${#lists.size(question.answerList)}"></span>
+				</td>
 				<td><span th:if="${question.writer !=null}" th:text="${question.writer.username}"></span></td>
 				<td th:text="${#temporals.format(question.createDate,'yyyy-MM-dd HH:mm')}"></td>
 			</tr>
