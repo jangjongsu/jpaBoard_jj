@@ -14,7 +14,20 @@ public class SecurityConfig {
 	@Bean
 	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http.authorizeHttpRequests().requestMatchers(
-				new AntPathRequestMatcher("/**")).permitAll();
+				new AntPathRequestMatcher("/**")).permitAll()
+			
+			//로그인과 로그아웃 관련 설정
+			.and() // 로그인 설정
+				.formLogin()
+				.loginPage("/login")//로그인 페이지가 보이게하는 요청
+				.defaultSuccessUrl("/") //로그인 성공시 이동할 페이지 요청
+			.and() //로그아웃 설정
+				.logout()
+				.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))//로그아웃 요청
+				.logoutSuccessUrl("/") // 로그아웃 성공시에 이동할 페이지 요청
+				.invalidateHttpSession(true); // 세션삭제 -> 로그아웃
+		
+		;
 		return http.build();
 	}
 	

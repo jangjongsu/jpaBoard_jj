@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -117,14 +118,27 @@ public class BoardController {
 		if(bindingResult.hasErrors()) {
 			return "member_join";
 		}
-		
 		if(!memberForm.getUserpw1().equals(memberForm.getUserpw2())) { //비밀번호 확인 실패
 			bindingResult.rejectValue("userpw2", "passwordCheckInCorrect","비밀번호 확인란에 비밀번호가 일치하지 않습니다.");
 			return "member_join";
 		}
-		
-		memberService.memberJoin(memberForm.getUserid(), memberForm.getUserpw1(), memberForm.getEmail());
+		try {
+			memberService.memberJoin(memberForm.getUserid(), memberForm.getUserpw1(), memberForm.getEmail());
+		}catch(DataIntegrityViolationException e){
+			e.printStackTrace(); //콘솔창에 에러 이유를 출력
+			bindingResult.reject("idRegFail","이미 등록된 아이디 입니다.");
+			return "member_join";
+		}catch (Exception e) {
+			e.printStackTrace(); //콘솔창에 에러 이유를 출력
+			bindingResult.reject("Fail", e.getMessage()); //해당오류 메시지를 에러로 전송
+			return "member_join";
+		}
 		
 		return "redirect:/";
+	}
+	
+	@GetMapping(value = "/login")
+	public String login() {
+		return "login_form";
 	}
 }
