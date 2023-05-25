@@ -232,6 +232,26 @@ public class BoardController {
 		return String.format("redirect:/questionContentView/%s", answer.getQuestion().getId());
 	}
 	
-	
+	@PreAuthorize("isAuthenticated()") // 인증이 필요하면 참
+	@RequestMapping(value = "/questionDelete/{id}")
+	public String questionDelete(@PathVariable("id") Integer id) {
+		
+		
+		questionService.questionDelete(id);
+		
+		
+		return "redirect:/";
+	}
+	@PreAuthorize("isAuthenticated()") // 인증이 필요하면 참
+	@RequestMapping(value = "/answerDelete/{id}")
+	public String answerDelete(@PathVariable("id") Integer id) {
+		
+		Answer answer = answerService.getAnswer(id);
+		
+		answerService.answerDelete(id);
+		
+		
+		return String.format("redirect:/questionContentView/%s", answer.getQuestion().getId());
+	}
 	
 }
