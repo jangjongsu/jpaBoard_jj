@@ -1,5 +1,7 @@
 package com.jjcompany.jpaBoard.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -33,6 +35,15 @@ public class MemberService {
 		return siteMember;
 		
 	}
+	
+	public SiteMember getMember(String username) {
+		
+		Optional<SiteMember> opr = siteMemberRepository.findByUsername(username);
+		
+		SiteMember siteMember = opr.get();
+		return siteMember;
+		
+	} 
 	
 	
 }

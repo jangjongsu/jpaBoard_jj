@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.jjcompany.jpaBoard.entity.Question;
+import com.jjcompany.jpaBoard.entity.SiteMember;
 import com.jjcompany.jpaBoard.exception.DataNotFoundException;
 import com.jjcompany.jpaBoard.repository.QuestionRepository;
 
@@ -18,11 +19,12 @@ public class QuestionService {
 		private QuestionRepository questionRepository;
 		
 		
-		public void questionCreate(String subject, String content) {
+		public void questionCreate(String subject, String content, SiteMember writer) {
 			
 			Question question = new Question();
 			question.setSubject(subject);
 			question.setContent(content);
+			question.setWriter(writer);
 			question.setCreateDate(LocalDateTime.now());
 			
 			questionRepository.save(question);

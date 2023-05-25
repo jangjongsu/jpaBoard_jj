@@ -23,10 +23,11 @@
 					<li class="nav-item"><a class="nav-link" href="questionCreate">질문하기</a>
 					</li>
 					<li class="nav-item">
-        			  <a class="nav-link" href="login">로그인</a>
+         				 <a class="nav-link" sec:authorize="isAnonymous()" th:href="@{/login}">로그인</a>
+         				 <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/logout}">로그아웃</a>
        				 </li>
         			<li class="nav-item">
-         				 <a class="nav-link" href="memberJoin">회원가입</a>
+         				 <a class="nav-link" sec:authorize="isAnonymous()" href="memberJoin">회원가입</a>
        				 </li>
 				</ul>
 			</div>

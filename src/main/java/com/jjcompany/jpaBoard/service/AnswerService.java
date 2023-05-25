@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.jjcompany.jpaBoard.entity.Answer;
 import com.jjcompany.jpaBoard.entity.Question;
+import com.jjcompany.jpaBoard.entity.SiteMember;
 import com.jjcompany.jpaBoard.repository.AnswerRepository;
 import com.jjcompany.jpaBoard.repository.QuestionRepository;
 
@@ -17,13 +18,14 @@ public class AnswerService {
 	@Autowired
 	private AnswerRepository answerRepository;
 	
-	public void answerCreate(String content, Question question) {
+	public void answerCreate(String content, Question question, SiteMember writer) {
 		
 		Answer answer = new Answer();
 		
 		answer.setContent(content);
 		answer.setCreateDate(LocalDateTime.now());
 		answer.setQuestion(question);
+		answer.setWriter(writer);
 		
 		answerRepository.save(answer);
 		
